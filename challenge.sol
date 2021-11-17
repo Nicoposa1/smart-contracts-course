@@ -35,14 +35,25 @@ contract CrowdFunding {
         _;
     }
     
+    event newFund(
+        address newInvestor,
+        string newFunder
+    );
     
-    function fundProject() public payable authorCantAport{
+    event changeState(
+        address newState,
+        string stateNew
+    );
+    
+    function fundProject(string memory newInvestor) public payable authorCantAport{
         author.transfer(msg.value);
         funds += msg.value;
+        emit newFund(msg.sender, newInvestor);
     }
     
     function changeProkectState(string calldata newState) public onlyAuthor{
         state = newState;
+        emit changeState(msg.sender, newState);
     }
     
 }
