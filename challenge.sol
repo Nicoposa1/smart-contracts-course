@@ -19,12 +19,29 @@ contract CrowdFunding {
         author = payable(msg.sender);
     }
     
-    function fundProject() public payable{
+    modifier onlyAuthor(){
+        require(
+            msg.sender == author,
+            "Only author can change the state of the project"
+        );
+        _;
+    }
+    
+    modifier authorCantAport(){
+        require(
+            msg.sender != author,
+            "The author can't aport her project"
+        );
+        _;
+    }
+    
+    
+    function fundProject() public payable authorCantAport{
         author.transfer(msg.value);
         funds += msg.value;
     }
     
-    function changeProkectState(string calldata newState) public{
+    function changeProkectState(string calldata newState) public onlyAuthor{
         state = newState;
     }
     
